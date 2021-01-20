@@ -41,9 +41,10 @@ oc apply -f httpd/tasks/pipeline.yaml -n tektontutorial
 **8. Start Pipeline**
 ```
 tkn pipeline start dockerfile-to-image \
-  --resource="appSource=git-source" \
+  --resource='appSource=git-source' \
   --resource='appImage=httpd-image' \
   --param contextDir='httpd-hello' \
+  --param tag='latest'
   --serviceaccount=build-bot \
   --showlog
 ```    
