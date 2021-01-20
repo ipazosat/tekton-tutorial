@@ -18,4 +18,4 @@ spec:
   type: image
   params:
     - name: url
-      value: "quay.io/ipazosat/tektontutorial/httpd:2.0"
+      value: "quay.io/tektontutorial/httpd"

@@ -6,18 +6,23 @@ spec:
   params:
     - name: contextDir
       description: the context directory from where to build the application
+    - name: tag
+      description: the tag for the image you want to build
+      type: string
   resources:
     - name: appSource
       type: git
     - name: appImage
       type: image
   tasks:
-    - name: build-docker-app
+    - name: build-docker-file
       taskRef:
         name: build-app
       params:
         - name: contextDir
           value: $(params.contextDir)
+        - name: tag
+          value: $(params.tag)
       resources:
         inputs:
           - name: source
