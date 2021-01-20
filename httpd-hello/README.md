@@ -1,4 +1,4 @@
-# Build from Dockerfile and push to Quay
+# Build from Dockerfile and push to registry 
 
 The following example shows how to create resources, tasks and pipelines on Tekton:
 
