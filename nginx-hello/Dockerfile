@@ -1,18 +1,14 @@
-FROM registry.access.redhat.com/ubi8:8.0
-
-RUN yum install -y --disableplugin=subscription-manager --nodocs nginx \
-  && yum clean all
-
-ADD index.html /usr/share/nginx/html
-
-ADD nginxconf.sed /tmp/
-RUN sed -i -f /tmp/nginxconf.sed /etc/nginx/nginx.conf
-
-RUN touch /run/nginx.pid \
-  && chgrp -R 0 /var/log/nginx /run/nginx.pid \
-  && chmod -R g+rwx /var/log/nginx /run/nginx.pid
-  
-EXPOSE 8080
-USER 1001
-
-CMD nginx -g "daemon off;"
+# DocumentRoot for Apache
+ENV DOCROOT=/var/www/html
+RUN yum install -y --no-docs --disableplugin=subscription-manager httpd && \
+ yum clean all --disableplugin=subscription-manager -y && \
+ echo "Hello from the httpd-parent container!" > ${DOCROOT}/index.html
+# Allows child images to inject their own content into DocumentRoot
+ONBUILD COPY src/ ${DOCROOT}/
+EXPOSE 80
+# This stuff is needed to ensure a clean start
+RUN rm -rf /run/httpd && mkdir /run/httpd
+# Run as the root user
+USER root
+# Launch httpd
+CMD /usr/sbin/httpd -DFOREGROUND
