@@ -45,6 +45,6 @@ tkn pipeline start dockerfile-to-image \
   --resource='appImage=httpd-image' \
   --param contextDir='httpd-hello' \
   --param tag='latest'
-  --serviceaccount=build-bot \
+  --serviceaccount='build-bot' \
   --showlog
 ```    
