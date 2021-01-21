@@ -1,6 +1,13 @@
 # Build from Dockerfile and push to registry 
 
-The following example shows how to create resources, tasks and pipelines on Tekton:
+This use case of Tekton creates the following objetcs:
+
+ - Pipeline resources. Source (git repository) and destination registry server.
+ - Tasks. This is where the action really happens.
+ - Pipeline. Ties it all together, resources and tasks.
+
+Tasks and pipeline are generic and you can reuse them in any project. You just need to define new pipeline resources and pass the correct parameters to tkn pipeline shown in step 8
+--resource='appSource=<your input pipeline resource>' and --resource='appImage=<your output pipeline resource>' 
 
 # Steps
 
@@ -17,9 +24,14 @@ oc new-project tektontutorial
 oc create sa -n tektontutorial build-bot
 ```
 
-**3. Create a secret for registry in case needed and add to service account**
+**3. Create a secret for registry in case needed and add it to the service account**
 
 ```
+export CONTAINER_REGISTRY_SERVER='<your registry server main url.Example quay.io>'
+export CONTAINER_REGISTRY_USER='<your registry user>'
+export CONTAINER_REGISTRY_PASSWORD='<your registry password>'
+
+
 oc create secret -n tektontutorial docker-registry container-registry-secret \
   --docker-server=$CONTAINER_REGISTRY_SERVER \
   --docker-username=$CONTAINER_REGISTRY_USER \
@@ -29,7 +41,7 @@ oc patch serviceaccount build-bot \
    -p '{"secrets": [{"name": "container-registry-secret"}]}'
 ```
 
-**4. Create a secret for github in case needed and add it to service account**
+**4. Create a secret for github in case needed and add it to the service account**
 
 ```
 export GITHUB_USERNAME='<your github.com username>'
@@ -53,19 +65,19 @@ oc patch serviceaccount build-bot \
 **5. Create the Pipeline Resources**
 
 ```
-oc apply -f httpd/resources/resources.yaml -n tektontutorial
+oc apply -f ./httpd/resources/resources.yaml -n tektontutorial
 ```
 
 **6. Create the Pipeline**
 
 ```
-oc apply -f httpd/pipelines/pipeline.yaml -n tektontutorial
+oc apply -f ./httpd/pipelines/pipeline.yaml -n tektontutorial
 ```
 
 **7. Create the Tasks**
 
 ```
-oc apply -f httpd/tasks/build-app-task.yaml -n tektontutorial
+oc apply -f ./httpd/tasks/build-app-task.yaml -n tektontutorial
 ```
 
 **8. Start Pipeline**
