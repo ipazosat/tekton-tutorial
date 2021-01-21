@@ -7,7 +7,7 @@ This use case of Tekton creates the following objetcs:
  - Pipeline. Ties it all together, resources and tasks.
 
 Tasks and pipeline are generic and you can reuse them in any project. You just need to define new pipeline resources and pass the correct parameters to tkn pipeline shown in step 8
---resource='appSource=source and --resource='appImage=destination' 
+--resource='appSource=source' and --resource='appImage=destination' 
 
 # Steps
 
